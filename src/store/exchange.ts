@@ -10,6 +10,7 @@ export type Exchanged = {
 export const useExchangeStore = defineStore("exchange", {
     state: () => ({
         pastComputed: [] as Exchanged[],
+        amounts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     }),
     actions: {
         async searchExchangeRate(search: any, secondCurrency: string) {

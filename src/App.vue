@@ -14,6 +14,18 @@
         </div>
       </v-col>
       <v-col cols="6">
+        <v-subheader>Amount</v-subheader>
+      </v-col>
+      <v-col cols="6">
+        <v-select
+          :items="amounts"
+          item-text="Number"
+          label="Amount"
+          v-on:change="computedCurrency"
+          single-line
+        ></v-select>
+      </v-col>
+      <v-col cols="6">
         <v-subheader> Currency Two </v-subheader>
       </v-col>
       <v-col cols="6">
@@ -58,10 +70,11 @@ export default defineComponent({
         (value: boolean) => !!value || "Required",
         (value: string) => (value && value.length >= 3) || "Min 3 characters",
       ],
+      selectedAmount: Number,
     };
   },
   computed: {
-    ...mapState(useExchangeStore, ["pastComputed"]),
+    ...mapState(useExchangeStore, ["pastComputed", "amounts"]),
   },
   methods: {
     // async searchExchangeRate(search: any) {
@@ -73,6 +86,9 @@ export default defineComponent({
     //   return console.log(this.rate);
     // },
     ...mapActions(useExchangeStore, ["searchExchangeRate"]),
+    computedCurrency(amount: any) {
+      return console.log("asdasd", amount);
+    },
   },
 });
 </script>
