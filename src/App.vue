@@ -2,71 +2,77 @@
   <v-container fluid>
     <v-row align="center">
       <v-col cols="6">
-        <v-subheader>
-          Prepended icon
-        </v-subheader>
+        <v-subheader> Currency One </v-subheader>
       </v-col>
       <v-col cols="6">
-        <v-select
-          onchange="searchExchangeRate(searchCurrnecyOne)"
-          menu-props="auto"
-          label="Select"
-          hide-details
-          prepend-icon="mdi-map"
-          single-line
-        ></v-select>
+        <div>
+          <v-text-field
+            v-model="currencyOne"
+            label="Currency"
+            :rules="rules"
+          ></v-text-field>
+        </div>
       </v-col>
       <v-col cols="6">
-        <v-subheader>
-          Appended icon
-        </v-subheader>
+        <v-subheader> Currency Two </v-subheader>
       </v-col>
       <v-col cols="6">
-        <v-select
-          append-outer-icon="mdi-map"
-          menu-props="auto"
-          hide-details
-          label="Select"
-          single-line
-        ></v-select>
+        <div>
+          <v-text-field
+            v-model="currencyTwo"
+            label="Currency"
+            :rules="rules"
+          ></v-text-field>
+        </div>
       </v-col>
-      <v-btn
-      depressed
-      color="primary"
-    >
-      Primary
-    </v-btn>
+      <v-col cols="12">
+        <v-btn
+          depressed
+          color="info"
+          @click="searchExchangeRate(currencyOne, currencyTwo)"
+          >Change Rates</v-btn
+        >
+      </v-col>
     </v-row>
   </v-container>
-
+  <TablePage />
 </template>
 
-  <script lang="ts">
-  import HomePage from "./components/HomePage.vue"
-  import {defineComponent} from "vue"
-  import { getExchangeRate } from "./services/ExchangeApi"
-  
-  export default defineComponent({
-    name: "App",
-    components:  {
-      HomePage
-    },
-    data: () => {
-      return {
-        data: {},
-        searchCurrencyOne: "",
-        searchCurrencyTwo:""
-      }
-    },
-    methods: {
-      async searchExchangeRate(search: string) {
-        const value = await getExchangeRate(search)
-        this.data = value
-        console.log("Data", this.data)
-      }
-    }
-    
-    
-  })
-  </script>
+<script lang="ts">
+import TablePage from "./components/TablePage.vue";
+import { defineComponent } from "vue";
+import { getExchangeRate } from "./services/ExchangeApi";
+import { mapActions, mapState } from "pinia";
+import { useExchangeStore } from "./store/exchange";
 
+export default defineComponent({
+  name: "App",
+  components: {
+    TablePage,
+  },
+  data: () => {
+    return {
+      currencyOne: "",
+      currencyTwo: "",
+      rules: [
+        (value: boolean) => !!value || "Required",
+        (value: string) => (value && value.length >= 3) || "Min 3 characters",
+      ],
+    };
+  },
+  computed: {
+    ...mapState(useExchangeStore, ["pastComputed"]),
+  },
+  methods: {
+    // async searchExchangeRate(search: any) {
+    //   const value = await getExchangeRate(search);
+    //   this.rate = value.conversion_rates[this.currencyTwo];
+    //   console.log("Data", this.rate);
+    // },
+    // getCurrencyNames() {
+    //   return console.log(this.rate);
+    // },
+    ...mapActions(useExchangeStore, ["searchExchangeRate"]),
+  },
+});
+</script>
