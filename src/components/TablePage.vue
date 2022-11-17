@@ -8,7 +8,7 @@
     </thead>
     <tbody>
       <tr v-for="item in pastComputed" :key="item.rate">
-        <td>{{ item.curr1 }}</td>
+        <td>{{ this.selectedAmount }} {{ item.curr1 }}</td>
         <td>{{ item.curr2 }} {{ item.rate }}</td>
       </tr>
     </tbody>
@@ -25,5 +25,6 @@ export default defineComponent({
   computed: {
     ...mapState(useExchangeStore, ["pastComputed"]),
   },
+  props: ["selectedAmount"],
 });
 </script>

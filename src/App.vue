@@ -19,6 +19,7 @@
       <v-col cols="6">
         <v-select
           :items="amounts"
+          v-model="selectedAmount"
           item-text="Number"
           label="Amount"
           v-on:change="computedCurrency"
@@ -41,13 +42,13 @@
         <v-btn
           depressed
           color="info"
-          @click="searchExchangeRate(currencyOne, currencyTwo)"
+          @click="searchExchangeRate(currencyOne, currencyTwo, selectedAmount)"
           >Change Rates</v-btn
         >
       </v-col>
     </v-row>
   </v-container>
-  <TablePage />
+  <TablePage :selectedAmount="selectedAmount" />
 </template>
 
 <script lang="ts">
@@ -70,11 +71,12 @@ export default defineComponent({
         (value: boolean) => !!value || "Required",
         (value: string) => (value && value.length >= 3) || "Min 3 characters",
       ],
-      selectedAmount: Number,
+      selectedAmount: 1 as any,
+      amounts: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     };
   },
   computed: {
-    ...mapState(useExchangeStore, ["pastComputed", "amounts"]),
+    ...mapState(useExchangeStore, ["pastComputed"]),
   },
   methods: {
     // async searchExchangeRate(search: any) {
@@ -90,5 +92,6 @@ export default defineComponent({
       return console.log("asdasd", amount);
     },
   },
+  watch: {},
 });
 </script>
